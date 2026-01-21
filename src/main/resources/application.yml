@@ -1,0 +1,42 @@
+# Server configuration
+server:
+  port: 8080  # The port your API will run on (default is 8080)
+
+spring:
+  # H2 Database configuration
+  datasource:
+    # Using file-based H2 database (data persists between restarts)
+    # The file will be created in your home directory: ~/activity-marketplace-db
+    url: jdbc:h2:file:~/activity-marketplace-db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # H2 Console configuration (web-based database browser)
+  h2:
+    console:
+      enabled: true  # Enable the H2 web console
+      path: /h2-console  # URL path to access the console
+
+  # JPA/Hibernate configuration
+  jpa:
+    # "update" means: create tables if they don't exist, update schema if entities change
+    # Other options: "create" (drop and recreate), "create-drop" (drop on shutdown), "validate", "none"
+    hibernate:
+      ddl-auto: update
+
+    # Show SQL in console (helpful for learning, but can be noisy)
+    show-sql: true
+
+    properties:
+      hibernate:
+        # Format SQL nicely in logs (makes it readable)
+        format_sql: true
+
+# Logging configuration
+logging:
+  level:
+    # Set Hibernate logging to INFO (less noisy than DEBUG)
+    org.hibernate.SQL: INFO
+    # Show the values bound to SQL parameters (helpful for debugging)
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
