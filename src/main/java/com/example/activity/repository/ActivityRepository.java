@@ -1,6 +1,6 @@
 package com.example.activity.repository;
 
-import com.example.activity.modal.Activity;
+import com.example.activity.model.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.example.activity.controller;
 
-import com.example.activity.modal.Activity;
+import com.example.activity.model.Activity;
 import com.example.activity.repository.ActivityRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

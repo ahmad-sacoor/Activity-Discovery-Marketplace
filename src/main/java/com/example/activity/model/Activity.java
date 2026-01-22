@@ -1,4 +1,4 @@
-package com.example.activity.modal;
+package com.example.activity.model;
 
 import jakarta.persistence.*;
 
