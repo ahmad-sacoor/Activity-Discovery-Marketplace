@@ -1,6 +1,6 @@
 package com.example.activity.bootstrap;
 
-import com.example.activity.modal.Activity;
+import com.example.activity.model.Activity;
 import com.example.activity.repository.ActivityRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
