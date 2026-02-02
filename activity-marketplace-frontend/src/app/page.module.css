@@ -1,0 +1,285 @@
+/* Clean neutral + emerald accent */
+
+.page {
+    min-height: 100vh;
+    background: #f6f7fb; /* off-white */
+    padding: 28px 16px;
+    display: flex;
+    justify-content: center;
+    color: #111827;
+}
+
+.container {
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Header */
+.header {
+    background: white;
+    border: 1px solid #e7e8ee;
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+    color: #0f172a;
+}
+
+.subtle {
+    margin: 6px 0 0 0;
+    color: #475569;
+    font-size: 13px;
+}
+
+.code {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: #0f172a;
+}
+
+.notice {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Sections */
+.section {
+    background: white;
+    border: 1px solid #e7e8ee;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sectionTitle {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    letter-spacing: 0.2px;
+    color: #0f172a;
+}
+
+.helperText {
+    color: #475569;
+    margin: 10px 0 0 0;
+    font-size: 13px;
+}
+
+.error {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    font-weight: 600;
+}
+
+/* Filters */
+.filtersRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 12px;
+    color: #475569;
+}
+
+.input {
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #0f172a;
+    outline: none;
+}
+
+.input::placeholder {
+    color: #94a3b8;
+}
+
+.input:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btnPrimary {
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid #059669;
+    background: #10b981; /* emerald */
+    color: white;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.btnPrimary:hover {
+    filter: brightness(1.04);
+}
+
+.btnSecondary {
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #0f172a;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.btnSecondary:hover {
+    background: #f8fafc;
+}
+
+.btnDisabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Activity grid/cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 14px;
+}
+
+.card {
+    border-radius: 16px;
+    padding: 14px;
+    background: white;
+    border: 1px solid #e7e8ee;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card:hover {
+    border-color: #d8dbe6;
+    transform: translateY(-1px);
+    transition: 120ms ease;
+}
+
+.cardTitle {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+    color: #0f172a;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+}
+
+.meta {
+    display: grid;
+    gap: 5px;
+    font-size: 13px;
+    color: #475569;
+}
+
+/* Book button */
+.bookBtn {
+    margin-top: 2px;
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid #059669;
+    background: #ecfdf5;
+    color: #065f46;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.bookBtn:hover {
+    background: #d1fae5;
+}
+
+.bookBtnBusy {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Bookings list */
+.bookingsList {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.bookingRow {
+    border-radius: 14px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e7e8ee;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.bookingTitle {
+    font-weight: 900;
+    color: #0f172a;
+}
+
+.bookingSub {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.bookingPrice {
+    font-weight: 1000;
+    color: #0f172a;
+}
