@@ -63,7 +63,37 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
-    // Simple request shape for POST /bookings
+    /**
+     * Cancel a booking (delete it).
+     *
+     * - 404 if booking not found
+     * - 403 if booking belongs to a different user
+     * - 204 if deleted
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long id, @RequestParam Long userId) {
+        if (userId == null || userId <= 0) {
+            return ResponseEntity.badRequest().body(Map.of("error", "userId must be > 0"));
+        }
+
+        Optional<Booking> bookingOpt = bookingRepository.findById(id);
+        if (bookingOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Booking not found: " + id));
+        }
+
+        Booking booking = bookingOpt.get();
+
+        // Simple “ownership” check since we don’t have real auth yet
+        if (!booking.getUserId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "You can only cancel your own bookings"));
+        }
+
+        bookingRepository.delete(booking);
+        return ResponseEntity.noContent().build(); // 204
+    }
+
     public static class BookingRequest {
         public Long userId;
         public Long activityId;

@@ -1,12 +1,9 @@
-// src/lib/api.ts
-
 import type { Activity, Booking, CreateBookingRequest } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
 async function handleJson<T>(res: Response): Promise<T> {
     if (!res.ok) {
-        // Try to extract a helpful message if backend sends { error: "..." }
         let message = `HTTP ${res.status}`;
         try {
             const data = await res.json();
@@ -14,7 +11,7 @@ async function handleJson<T>(res: Response): Promise<T> {
                 message = String((data as any).error);
             }
         } catch {
-            // ignore JSON parse errors
+            // ignore
         }
         throw new Error(message);
     }
@@ -27,7 +24,6 @@ export async function fetchActivities(filters?: {
     maxPrice?: string;
 }): Promise<Activity[]> {
     const params = new URLSearchParams();
-
     if (filters?.city) params.set("city", filters.city);
     if (filters?.category) params.set("category", filters.category);
     if (filters?.maxPrice) params.set("maxPrice", filters.maxPrice);
@@ -51,6 +47,26 @@ export async function createBooking(body: CreateBookingRequest): Promise<Booking
 export async function fetchBookings(userId: number): Promise<Booking[]> {
     const res = await fetch(`${API_URL}/bookings?userId=${userId}`, { cache: "no-store" });
     return handleJson<Booking[]>(res);
+}
+
+export async function cancelBooking(bookingId: number, userId: number): Promise<void> {
+    const res = await fetch(`${API_URL}/bookings/${bookingId}?userId=${userId}`, {
+        method: "DELETE",
+    });
+
+    // DELETE 204 typically has no JSON body
+    if (!res.ok) {
+        let message = `HTTP ${res.status}`;
+        try {
+            const data = await res.json();
+            if (data && typeof data === "object" && "error" in data) {
+                message = String((data as any).error);
+            }
+        } catch {
+            // ignore
+        }
+        throw new Error(message);
+    }
 }
 
 export function getApiUrlForDisplay() {
