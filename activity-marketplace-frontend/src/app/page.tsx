@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { Activity, Booking } from "@/types";
-import { createBooking, fetchActivities, fetchBookings, getApiUrlForDisplay } from "@/lib/api";
+import {cancelBooking, createBooking, fetchActivities, fetchBookings, getApiUrlForDisplay} from "@/lib/api";
 import styles from "./page.module.css";
 
 const USER_ID = 1;
@@ -28,6 +28,9 @@ export default function Page() {
     const [bookingsLoading, setBookingsLoading] = useState(false);
     const [bookingsError, setBookingsError] = useState("");
 
+    // Cancel feedback
+    const [cancelInFlightId, setCancelInFlightId] = useState<number | null>(null);
+
     // Notice
     const [notice, setNotice] = useState("");
 
@@ -46,6 +49,19 @@ export default function Page() {
             setActivitiesError(e?.message ?? "Failed to load activities");
         } finally {
             setActivitiesLoading(false);
+        }
+    }
+
+    async function loadBookings() {
+        try {
+            setBookingsLoading(true);
+            setBookingsError("");
+            const data = await fetchBookings(USER_ID);
+            setBookings(data);
+        } catch (e: any) {
+            setBookingsError(e?.message ?? "Failed to load bookings");
+        } finally {
+            setBookingsLoading(false);
         }
     }
 
@@ -73,6 +89,10 @@ export default function Page() {
             setBookingInFlightId(activityId);
             await createBooking({ userId: USER_ID, activityId });
             showNotice("Booked!");
+            // Optional: refresh bookings automatically if user already loaded them
+            if (bookings.length > 0) {
+                await loadBookings();
+            }
         } catch (e: any) {
             showNotice(`Booking failed: ${e?.message ?? "Unknown error"}`);
         } finally {
@@ -80,16 +100,16 @@ export default function Page() {
         }
     }
 
-    async function onLoadMyBookings() {
+    async function onCancelBooking(bookingId: number) {
         try {
-            setBookingsLoading(true);
-            setBookingsError("");
-            const data = await fetchBookings(USER_ID);
-            setBookings(data);
+            setCancelInFlightId(bookingId);
+            await cancelBooking(bookingId, USER_ID);
+            showNotice("Cancelled");
+            await loadBookings();
         } catch (e: any) {
-            setBookingsError(e?.message ?? "Failed to load bookings");
+            showNotice(`Cancel failed: ${e?.message ?? "Unknown error"}`);
         } finally {
-            setBookingsLoading(false);
+            setCancelInFlightId(null);
         }
     }
 
@@ -98,10 +118,8 @@ export default function Page() {
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div>
-                        <h1 className={styles.title}>Activity Discovery Marketplace</h1>
-                        <p className={styles.subtle}>
-                            API: <span className={styles.code}>{API_URL}</span>
-                        </p>
+                        <h1 className={styles.title}>City Experiences</h1>
+
                     </div>
                     {notice && <div className={styles.notice}>{notice}</div>}
                 </header>
@@ -214,7 +232,7 @@ export default function Page() {
 
                         <button
                             className={`${styles.btnSecondary} ${bookingsLoading ? styles.btnDisabled : ""}`}
-                            onClick={onLoadMyBookings}
+                            onClick={loadBookings}
                             disabled={bookingsLoading}
                         >
                             {bookingsLoading ? "Loading..." : "Load My Bookings"}
@@ -228,19 +246,35 @@ export default function Page() {
                     )}
 
                     <div className={styles.bookingsList}>
-                        {bookings.map((b) => (
-                            <div key={b.id} className={styles.bookingRow}>
-                                <div>
-                                    <div className={styles.bookingTitle}>
-                                        #{b.id} • {new Date(b.bookedAt).toLocaleString()}
+                        {bookings.map((b) => {
+                            const cancelling = cancelInFlightId === b.id;
+
+                            return (
+                                <div key={b.id} className={styles.bookingRow}>
+                                    <div>
+                                        <div className={styles.bookingTitle}>
+                                            #{b.id} • {new Date(b.bookedAt).toLocaleString()}
+                                        </div>
+                                        <div className={styles.bookingSub}>
+                                            {b.activity.title} — {b.activity.city} — {b.activity.category}
+                                        </div>
                                     </div>
-                                    <div className={styles.bookingSub}>
-                                        {b.activity.title} — {b.activity.city} — {b.activity.category}
+
+                                    <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                        <div className={styles.bookingPrice}>€{b.activity.price}</div>
+
+                                        <button
+                                            className={`${styles.btnSecondary} ${cancelling ? styles.btnDisabled : ""}`}
+                                            onClick={() => onCancelBooking(b.id)}
+                                            disabled={cancelling}
+                                            title="Cancel this booking"
+                                        >
+                                            {cancelling ? "Cancelling..." : "Cancel"}
+                                        </button>
                                     </div>
                                 </div>
-                                <div className={styles.bookingPrice}>€{b.activity.price}</div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </section>
             </div>
